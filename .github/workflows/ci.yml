@@ -1,108 +1,71 @@
-name: CI
+name: Infrastructure CI
 
 on:
   pull_request:
-    branches: [main, develop]
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
 
 jobs:
-  # ──────────────────────────────────────────────────
-  # Backend tests (Python / FastAPI)
-  # ──────────────────────────────────────────────────
-  test-backend:
-    name: Backend — pytest
+  terraform-validation:
+    name: Terraform Validation & Security
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: pgvector/pgvector:pg16
-        env:
-          POSTGRES_DB: cixiohub_test
-          POSTGRES_USER: cixiohub
-          POSTGRES_PASSWORD: cixiohub
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: terraform
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
         with:
-          python-version: "3.11"
-          cache: pip
+          terraform_version: 1.7.0
 
-      - name: Install dependencies
-        working-directory: backend
-        run: pip install -r requirements.txt
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
 
-      - name: Run tests
-        working-directory: backend
-        env:
-          DATABASE_URL: postgresql+asyncpg://cixiohub:cixiohub@localhost:5432/cixiohub_test
-          SECRET_KEY: test-secret-key-not-for-production
-        run: pytest tests/ -v --tb=short
+      - name: Terraform Init
+        run: terraform init -backend=false
 
-  # ──────────────────────────────────────────────────
-  # Frontend build check (Next.js)
-  # ──────────────────────────────────────────────────
-  build-frontend:
-    name: Frontend — next build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - name: Terraform Validate
+        run: terraform validate
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
 
-      - name: Install dependencies
-        working-directory: frontend
-        run: npm ci
-
-      - name: Build
-        working-directory: frontend
-        env:
-          NEXT_PUBLIC_API_URL: http://localhost:8000
-        run: npm run build
-
-  # ──────────────────────────────────────────────────
-  # Notify service tests
-  # ──────────────────────────────────────────────────
-  test-notify:
-    name: Notify — pytest
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-
-      - name: Install dependencies
-        working-directory: notify
-        run: pip install -r requirements.txt
-
-      - name: Run tests (if any)
-        working-directory: notify
+      - name: Run TFLint
         run: |
-          if [ -d tests ]; then pytest tests/ -v --tb=short; else echo "No tests yet"; fi
+          tflint --init
+          tflint --recursive
 
-  # ──────────────────────────────────────────────────
-  # Docker Compose validation
-  # ──────────────────────────────────────────────────
-  validate-compose:
-    name: Infra — docker compose config
+      - name: Run tfsec Security Scan
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: terraform
+
+      - name: Run Checkov Security Scan
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: terraform
+          framework: terraform
+
+  configuration-validation:
+    name: Configuration Validation
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Validate docker-compose.yml
-        working-directory: infra
-        run: docker compose config --quiet
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate Mosquitto Configuration Exists
+        run: |
+          test -f mosquitto/mosquitto.conf
