@@ -54,10 +54,10 @@ module "rds" {
 }
 
 module "elasticache" {
-  source     = "./modules/elasticache"
-  app_name   = var.app_name
+  source      = "./modules/elasticache"
+  app_name    = var.app_name
   environment = var.environment
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnet_ids
-  sg_id      = module.vpc.redis_sg_id
+  vpc_id      = module.vpc.vpc_id
+  subnet_ids  = module.vpc.private_subnet_ids
+  sg_id       = module.vpc.redis_sg_id
 }

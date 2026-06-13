@@ -1,8 +1,8 @@
-variable "app_name"    { type = string }
+variable "app_name" { type = string }
 variable "environment" { type = string }
-variable "vpc_id"      { type = string }
-variable "subnet_ids"  { type = list(string) }
-variable "sg_id"       { type = string }
+variable "vpc_id" { type = string }
+variable "subnet_ids" { type = list(string) }
+variable "sg_id" { type = string }
 
 resource "aws_elasticache_subnet_group" "main" {
   name       = "${var.app_name}-${var.environment}-redis-subnet"
@@ -24,4 +24,4 @@ resource "aws_elasticache_cluster" "redis" {
 }
 
 output "endpoint" { value = aws_elasticache_cluster.redis.cache_nodes[0].address }
-output "port"     { value = aws_elasticache_cluster.redis.cache_nodes[0].port }
+output "port" { value = aws_elasticache_cluster.redis.cache_nodes[0].port }

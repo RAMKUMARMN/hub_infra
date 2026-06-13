@@ -1,4 +1,4 @@
-variable "app_name"    { type = string }
+variable "app_name" { type = string }
 variable "environment" { type = string }
 
 resource "aws_s3_bucket" "files" {
@@ -39,4 +39,4 @@ resource "aws_s3_bucket_public_access_block" "files" {
 }
 
 output "bucket_name" { value = aws_s3_bucket.files.bucket }
-output "bucket_arn"  { value = aws_s3_bucket.files.arn }
+output "bucket_arn" { value = aws_s3_bucket.files.arn }
