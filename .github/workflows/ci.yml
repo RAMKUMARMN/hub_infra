@@ -4,10 +4,12 @@ on:
   pull_request:
     branches:
       - main
+      - cg2
 
   push:
     branches:
       - main
+      - cg2
 
 permissions:
   contents: read
