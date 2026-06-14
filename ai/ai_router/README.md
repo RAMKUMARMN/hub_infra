@@ -13,7 +13,7 @@ Designed to run locally on consumer hardware (specifically optimized for 8GB VRA
 The system utilizes a specialized **Two-Tier LLM Architecture**:
 
 ### 1. The Fast Path (The Router)
-* **Default Model:** `llama3.2:3b` (Recommended for strict JSON) or `qwen2.5:1.5b`.
+* **Default Model:** `llama3.2:3b ` (Recommended for strict JSON) or `qwen2.5:1.5b`.
 * **Role:** The Traffic Cop. It analyzes the prompt, assigns a confidence score, and calculates a strict probability matrix across four categories (`General`, `Reasoning`, `Coding`, `Vision`).
 * **Execution:** If the router's confidence hits the Double-Lock Threshold (Score >= 85 AND Probability >= 70%), and the task is casual `General` chat, it serves its own response instantly without waking up the heavy models.
 
