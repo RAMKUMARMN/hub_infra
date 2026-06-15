@@ -1,0 +1,74 @@
+services:
+
+  # ──────────────────────────────────────────────────────────
+  # Ollama Server
+  # ──────────────────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: cixiohub-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # GPU Support (Uncomment below if running on a machine with NVIDIA GPUs and nvidia-container-toolkit)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # ──────────────────────────────────────────────────────────
+  # Ollama Model Initialization
+  # ──────────────────────────────────────────────────────────
+  ollama-pull:
+    image: ollama/ollama:latest
+    container_name: cixiohub-ollama-pull
+    depends_on:
+      ollama:
+        condition: service_started
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    entrypoint: >
+      /bin/sh -c "
+      echo 'Waiting for Ollama to be ready...' &&
+      while ! ollama list > /dev/null 2>&1; do sleep 2; done &&
+      echo 'Ollama is running! Pulling models (this may take some time)...' &&
+      for model in llama3.2:3b qwen3.5:latest qwen2.5-coder:7b llama3.2-vision:latest; do
+        until ollama pull $$model; do
+          echo \"Network error while pulling $$model, retrying in 5 seconds...\"
+          sleep 5
+        done
+      done &&
+      echo '✅ All models pulled successfully!'
+      "
+    # This container exits automatically once models are pulled.
+
+  # ──────────────────────────────────────────────────────────
+  # AI Router (Python App)
+  # ──────────────────────────────────────────────────────────
+  ai_router:
+    build:
+      context: ./ai/ai_router
+      dockerfile: Dockerfile
+    container_name: cixiohub-ai_router
+    depends_on:
+      - ollama
+    environment:
+      - LLM_CHAT_ENDPOINT=http://ollama:11434/api/chat
+      - ROUTER_MODEL=llama3.2:3b
+      - MODEL_GENERAL=qwen3.5:latest
+      - MODEL_CODING=qwen2.5-coder:7b
+      - MODEL_REASONING=qwen3.5:latest
+      - MODEL_VISION=llama3.2-vision:latest
+    # Enable TTY & Stdin to allow 'docker attach' for the interactive CLI simulator
+    stdin_open: true 
+    tty: true        
+    volumes:
+      - ./ai/ai_router:/app
+    restart: unless-stopped
+
+volumes:
+  ollama_data:

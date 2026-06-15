@@ -11,3 +11,12 @@ __pycache__/
 
 # OS generated files
 .DS_Store
+
+# Terraform
+.terraform/
+.terraform.*
+terraform.tfstate
+terraform.tfstate.*
+*.tfvars
+*.tfvars.json
+plan.out

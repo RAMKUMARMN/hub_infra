@@ -6,13 +6,8 @@ from app.router.prompts import ROUTER_SYSTEM_PROMPT
 from app.core import config # Ensure this is imported if you use config variables
 
 # Mirroring your environment mapping
-ROUTER_MODEL = "llama3.2:3b"
-MODEL_MAPPING = {
-    "General": "qwen3.5:latest",
-    "Coding": "qwen2.5-coder:7b",
-    "Reasoning": "qwen3.5:latest",
-    "Vision": "llama3.2-vision:latest"
-}
+ROUTER_MODEL = config.ROUTER_MODEL
+MODEL_MAPPING = config.WORKER_MODELS
 
 class RoutingEngine:
     def __init__(self):
@@ -21,12 +16,7 @@ class RoutingEngine:
         self.queue_lock = threading.Lock()
         
         # Track active requests inside your Python gateway
-        self.active_queues = {
-            ROUTER_MODEL: 0,
-            "qwen3.5:latest": 0,
-            "qwen2.5-coder:7b": 0,
-            "llama3.2-vision:latest": 0
-        }
+        self.active_queues = {model: 0 for model in set(list(MODEL_MAPPING.values()) + [ROUTER_MODEL])}
         
         # Safety circuit-breaker threshold
         self.ROUTER_QUEUE_LIMIT = 5
@@ -137,7 +127,8 @@ class RoutingEngine:
         # CASE C: Worker Dispatch (Escalation OR Load-Shedded General)
         else:
             # Map the category to the correct heavy model
-            target_model = MODEL_MAPPING.get(target_category, "qwen3.5:latest")
+            fallback_model = MODEL_MAPPING.get("General", "qwen3.5:latest")
+            target_model = MODEL_MAPPING.get(target_category, fallback_model)
             print(f"\n\033[33m[Dispatch]\033[0m Routing {target_category} task to {target_model}...")
             
             # Setup worker context
@@ -159,16 +150,16 @@ class RoutingEngine:
                 print(f"\n❌ [CRITICAL ERROR] Worker {target_model} crashed: {str(e)}")
                 
                 # STAGE 2 DEFENSE: Direct Pass-Through Fallback
-                if target_model != "qwen3.5:latest":
-                    print(f"⚠️ Executing Direct Pass-Through to qwen3.5:latest...")
-                    self._increment_queue("qwen3.5:latest")
+                if target_model != fallback_model:
+                    print(f"⚠️ Executing Direct Pass-Through to {fallback_model}...")
+                    self._increment_queue(fallback_model)
                     try:
-                        final_answer = self.client.generate_worker_response("qwen3.5:latest", worker_history)
-                        target_model = "qwen3.5:latest (EMERGENCY PASS-THROUGH)"
+                        final_answer = self.client.generate_worker_response(fallback_model, worker_history)
+                        target_model = f"{fallback_model} (EMERGENCY PASS-THROUGH)"
                     except Exception as fallback_error:
                         final_answer = f"System Error: Both primary and fallback models failed. Details: {str(fallback_error)}"
                     finally:
-                        self._decrement_queue("qwen3.5:latest")
+                        self._decrement_queue(fallback_model)
                 else:
                     final_answer = f"System Error: Primary general model failed. Details: {str(e)}"
             finally:
