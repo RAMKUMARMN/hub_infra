@@ -1,0 +1,10 @@
+[
+  {
+    "run": "if ! command -v terraform &>/dev/null; then echo 'ERROR: Terraform is not installed. Install Terraform to work on hub_infra.'; exit 1; fi",
+    "description": "Verify Terraform is installed"
+  },
+  {
+    "run": "echo \"Terraform version: $(terraform version -json 2>/dev/null | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get(\"terraform_version\",\"unknown\"))' 2>/dev/null || terraform version 2>/dev/null | head -1)\"",
+    "description": "Report Terraform version"
+  }
+]

@@ -1,6 +1,13 @@
 ---
 name: "infra-agent"
 description: "Describe what this custom agent does and when to use it."
+hooks:
+  PreSession:
+    - type: command
+      command: "if ! command -v terraform &>/dev/null; then echo 'ERROR: Terraform not installed.'; exit 1; fi"
+  PostCommand:
+    - type: command
+      command: "echo \"[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] exit=$1 | $2\" >> /tmp/infra-agent.log"
 ---
 
 This custom "infra agent" assists contributors and maintainers working in this repo with Terraform and related infrastructure-in-code tasks. It acts as a focused, safety-first helper for authoring, reviewing, validating, and documenting changes to the infrastructure modules and top-level configurations housed in this repository.

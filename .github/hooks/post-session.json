@@ -1,0 +1,10 @@
+[
+  {
+    "run": "rm -f /tmp/infra-hook-*.tmp; echo 'Cleaned up temp files.'",
+    "description": "Remove temporary files created during session"
+  },
+  {
+    "run": "if [ -f /tmp/infra-agent-session.log ]; then echo \"Session log: /tmp/infra-agent-session.log\"; fi",
+    "description": "Report session log location"
+  }
+]

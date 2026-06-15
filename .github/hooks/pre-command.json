@@ -1,0 +1,10 @@
+[
+  {
+    "run": "if [[ \"$*\" == *\"terraform apply\"* && \"$*\" != *\"-auto-approve\"* ]] && [[ \"$*\" != *\"terraform plan\"* ]]; then echo 'CAUTION: Running terraform apply without reviewing plan first. Run terraform plan first.'; fi",
+    "description": "Warn when running terraform apply without a prior plan"
+  },
+  {
+    "run": "if [[ \"$*\" == \"git push origin main\" && -z \"${CI:-}\" ]]; then echo 'BLOCKED: Direct push to main outside CI. Open a PR instead.'; exit 1; fi",
+    "description": "Prevent direct pushes to main outside CI"
+  }
+]
