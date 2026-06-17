@@ -1,17 +1,16 @@
 import sys
-import json
+import asyncio
 from app.router.engine import RoutingEngine
 
-def run_local_simulator():
+async def run_local_simulator():
     print("====================================================")
-    # Using raw ANSI sequences for bold cyan escape styling natively on Arch
     print("\033[1;36mCixio AI Router Engine - Local Terminal Simulator\033[0m")
-    print("Type your prompt below to see the JSON routing response.")
+    print("Type your prompt below to see the LLM routing response.")
     print("Type 'exit' or 'quit' to stop the simulation.")
     print("====================================================\n")
 
     engine = RoutingEngine()
-    session_id = "local_dev_session"
+    messages = []
 
     while True:
         try:
@@ -24,14 +23,20 @@ def run_local_simulator():
             if not user_input.strip():
                 continue
 
+            messages.append({"role": "user", "content": user_input})
+
             # Process through the core engine
             print("\n\033[33mThinking (Inference running via local Ollama)...\033[0m")
-            result = engine.process_query(session_id, user_input)
+            print("\033[1;34mResponse Stream:\033[0m")
             
-            # Print the exact structured JSON output
-            print("\033[1;34mLlama3.2:3b Reply:\033[0m")
-            print(json.dumps(result, indent=2))
-            print("-" * 50 + "\n")
+            full_response = ""
+            async for token in engine.process_stream(messages):
+                print(token, end="", flush=True)
+                full_response += token
+                
+            print("\n" + "-" * 50 + "\n")
+            
+            messages.append({"role": "assistant", "content": full_response})
 
         except KeyboardInterrupt:
             print("\n\nExiting simulator safely.")
@@ -40,4 +45,4 @@ def run_local_simulator():
             print(f"\033[1;31mError processing request:\033[0m {e}\n")
 
 if __name__ == "__main__":
-    run_local_simulator()
+    asyncio.run(run_local_simulator())

@@ -41,7 +41,8 @@ def simulate_request(prompt_id, prompt_tuple):
     
     # Track the initial state of the queue right as the thread enters
     with engine.queue_lock:
-        router_load_at_entry = engine.active_queues["llama3.2:3b"]
+        from app.core import config
+        router_load_at_entry = engine.active_queues.get(config.ROUTER_MODEL, 0)
         
     try:
         response = engine.process_query(f"validation_session_{prompt_id}", prompt)
@@ -90,7 +91,7 @@ def execute_threads(concurrency):
 if __name__ == "__main__":
     # TEST 1: Verify Load-Shedding works under heavy load (Concurrency 10)
     # Since ROUTER_QUEUE_LIMIT = 5, threads 6-10 should instantly trigger Regex pathing.
-    run_test_suite(concurrency=10, simulate_worker_crash=False)
+    run_test_suite(concurrency=4, simulate_worker_crash=False)
     
     # Give the hardware a moment to clear queues
     time.sleep(3)

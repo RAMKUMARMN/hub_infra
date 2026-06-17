@@ -104,5 +104,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate docker-compose.yml
-        working-directory: infra
         run: docker compose config --quiet
+
+  # ──────────────────────────────────────────────────
+  # AI Router validation
+  # ──────────────────────────────────────────────────
+  test-ai-router:
+    name: AI Router — validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        working-directory: ai/ai_router
+        run: pip install -r requirements.txt
+
+      - name: Run validation tests
+        working-directory: ai/ai_router
+        run: python tests/run_validation_test.py
+
+  # ──────────────────────────────────────────────────
+  # Terraform checks
+  # ──────────────────────────────────────────────────
+  validate-terraform:
+    name: Terraform — fmt & validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init -backend=false
+
+      - name: Terraform Format Check
+        working-directory: terraform
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        working-directory: terraform
+        run: terraform validate
