@@ -11,5 +11,7 @@ COPY . .
 
 # Environment variables will be injected via docker-compose
 
-# Start the interactive simulator
-CMD ["python", "-m", "app.main"]
+EXPOSE 8003
+
+# Start the FastAPI web service
+CMD ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8003"]

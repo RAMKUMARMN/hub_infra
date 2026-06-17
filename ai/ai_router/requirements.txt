@@ -1,3 +1,5 @@
 httpx
 paho-mqtt
 python-dotenv
+fastapi
+uvicorn

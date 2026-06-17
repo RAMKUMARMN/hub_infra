@@ -63,9 +63,8 @@ services:
       - MODEL_CODING=qwen2.5-coder:7b
       - MODEL_REASONING=qwen3.5:latest
       - MODEL_VISION=llama3.2-vision:latest
-    # Enable TTY & Stdin to allow 'docker attach' for the interactive CLI simulator
-    stdin_open: true 
-    tty: true        
+    ports:
+      - "8003:8003"
     volumes:
       - ./ai/ai_router:/app
     restart: unless-stopped
