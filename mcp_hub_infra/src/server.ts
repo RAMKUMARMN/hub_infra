@@ -9,6 +9,9 @@ import { discoverCiCdHandler } from "./tools/discoverCiCd.js";
 import { discoverMessagingConfigHandler } from "./tools/discoverMessagingConfig.js";
 import { discoverEnvironmentVariablesHandler } from "./tools/discoverEnvironmentVariables.js";
 import { findResourceHandler } from "./tools/findResource.js";
+import { discoverAiRouterHandler } from "./tools/discoverAiRouter.js";
+import { readInfraHookLogsHandler } from "./tools/readInfraHookLogs.js";
+
 
 const server = new McpServer({
   name: "hub-infra-mcp",
@@ -64,6 +67,20 @@ server.tool(
     resource: z.string(),
   },
   findResourceHandler
+);
+
+server.tool(
+  "discover_ai_router",
+  "Discover AI router files and prompts",
+  {},
+  discoverAiRouterHandler
+);
+
+server.tool(
+  "read_infra_hook_logs",
+  "Read infrastructure automation hook logs",
+  {},
+  readInfraHookLogsHandler
 );
 
 async function main() {

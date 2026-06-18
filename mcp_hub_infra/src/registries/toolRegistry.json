@@ -1,0 +1,56 @@
+[
+  {
+    "id": "discover_cicd",
+    "name": "Discover CI/CD",
+    "description": "Discover CI/CD workflows and pipeline configurations.",
+    "file": "discoverCiCd.ts"
+  },
+  {
+    "id": "discover_environment_variables",
+    "name": "Discover Environment Variables",
+    "description": "Discover environment variables and configuration settings.",
+    "file": "discoverEnvironmentVariables.ts"
+  },
+  {
+    "id": "discover_infra_architecture",
+    "name": "Discover Infrastructure Architecture",
+    "description": "Discover overall infrastructure architecture and components.",
+    "file": "discoverInfraArchitecture.ts"
+  },
+  {
+    "id": "discover_infrastructure_resources",
+    "name": "Discover Infrastructure Resources",
+    "description": "Discover infrastructure resources and their relationships.",
+    "file": "discoverInfrastructureResources.ts"
+  },
+  {
+    "id": "discover_messaging_config",
+    "name": "Discover Messaging Config",
+    "description": "Discover messaging systems and broker configurations.",
+    "file": "discoverMessagingConfig.ts"
+  },
+  {
+    "id": "discover_terraform_modules",
+    "name": "Discover Terraform Modules",
+    "description": "Discover Terraform modules and infrastructure as code definitions.",
+    "file": "discoverTerraformModules.ts"
+  },
+  {
+    "id": "find_resource",
+    "name": "Find Resource",
+    "description": "Find infrastructure resources by name or identifier.",
+    "file": "findResource.ts"
+  },
+  {
+    "id": "discover_ai_router",
+    "name": "Discover AI Router",
+    "description": "Discover FastAPI AI routing, prompts and LLM integration.",
+    "file": "discoverAiRouter.ts"
+  },
+  {
+    "id": "read_infra_hook_logs",
+    "name": "Read Infra Hook Logs",
+    "description": "Read infrastructure automation hook execution logs.",
+    "file": "readInfraHookLogs.ts"
+  }
+]
