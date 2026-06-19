@@ -1,0 +1,55 @@
+{
+  "tools": [
+    {
+      "name": "discover_infra_architecture",
+      "description": "Discover infrastructure architecture and repository structure",
+      "module": "../tools/discoverInfraArchitecture.js",
+      "handler": "discoverInfraArchitectureHandler",
+      "schema": {}
+    },
+    {
+      "name": "discover_terraform_modules",
+      "description": "Discover Terraform modules",
+      "module": "../tools/discoverTerraformModules.js",
+      "handler": "discoverTerraformModulesHandler",
+      "schema": {}
+    },
+    {
+      "name": "discover_infrastructure_resources",
+      "description": "Discover infrastructure resources",
+      "module": "../tools/discoverInfrastructureResources.js",
+      "handler": "discoverInfrastructureResourcesHandler",
+      "schema": {}
+    },
+    {
+      "name": "discover_ci_cd",
+      "description": "Discover CI/CD workflows",
+      "module": "../tools/discoverCiCd.js",
+      "handler": "discoverCiCdHandler",
+      "schema": {}
+    },
+    {
+      "name": "discover_messaging_config",
+      "description": "Discover messaging and MQTT configuration",
+      "module": "../tools/discoverMessagingConfig.js",
+      "handler": "discoverMessagingConfigHandler",
+      "schema": {}
+    },
+    {
+      "name": "discover_environment_variables",
+      "description": "Discover Terraform environment variables",
+      "module": "../tools/discoverEnvironmentVariables.js",
+      "handler": "discoverEnvironmentVariablesHandler",
+      "schema": {}
+    },
+    {
+      "name": "find_resource",
+      "description": "Find infrastructure resources and related files",
+      "module": "../tools/findResource.js",
+      "handler": "findResourceHandler",
+      "schema": {
+        "resource": "string"
+      }
+    }
+  ]
+}
