@@ -1,12 +1,9 @@
-node_modules/
-dist/
-.vscode/
-
 # Environments
 .env
 venv/
 env/
 
+**/node_modules/
 # Python
 __pycache__/
 *.pyc
