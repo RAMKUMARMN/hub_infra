@@ -36,7 +36,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://10.0.2.2:11434/api/generate",
+        "url": "http://ollama:11434/api/generate",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"model\": \"llama3.2\",\n  \"prompt\":\"You are a document intelligence assistant.\\n\\nAnalyze the following document and provide:\\n\\nTLDR:\\n<one sentence>\\n\\nKEY_INSIGHTS:\\n- insight 1\\n- insight 2\\n- insight 3\\n\\nACTION_ITEMS:\\n- action 1\\n- action 2\\n- action 3\\n\\nDocument:\\n\\n{{$json.body.document_text}}\",\n  \"stream\": false\n}",
