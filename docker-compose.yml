@@ -10,6 +10,14 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    # GPU Support (Uncomment below if running on a machine with NVIDIA GPUs and nvidia-container-toolkit)
+    #deploy:
+      #resources:
+        #reservations:
+          #devices:
+            #- driver: nvidia
+              #count: all
+              #capabilities: [gpu]/*
     restart: unless-stopped
 
   # ──────────────────────────────────────────────────────────
