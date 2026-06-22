@@ -1,7 +1,9 @@
 import sys
 import asyncio
 from app.router.engine import RoutingEngine
-
+from app.mcp.mcp_client_manager import (
+    mcp_client_manager
+)
 async def run_local_simulator():
     print("====================================================")
     print("\033[1;36mCixio AI Router Engine - Local Terminal Simulator\033[0m")
@@ -17,6 +19,10 @@ async def run_local_simulator():
             # Capture user input
             user_input = input("\033[1;32mUser > \033[0m")
             if user_input.strip().lower() in ['exit', 'quit']:
+                await (
+                    mcp_client_manager
+                    .shutdown()
+                )
                 print("\nShutting down simulator. Goodbye!")
                 break
                 

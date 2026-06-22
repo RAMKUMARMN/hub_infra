@@ -1,0 +1,10 @@
+{
+    "id": "discover-cixio-registries",
+    "name": "discover-cixio-registries",
+    "type": "skill",
+    "repository": "hub_mobile",
+    "enabled": true,
+    "version": "1.0.0",
+    "mcp_server": "",
+    "tool": ""
+}

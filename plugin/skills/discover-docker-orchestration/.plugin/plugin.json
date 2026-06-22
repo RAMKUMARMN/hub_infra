@@ -1,0 +1,10 @@
+{
+    "id":  "discover-docker-orchestration",
+    "name":  "discover-docker-orchestration",
+    "type":  "skill",
+    "repository":  "hub_infra",
+    "enabled":  true,
+    "version":  "1.0.0",
+    "mcp_server":  "mcp_hub_infra",
+    "tool":  "discoverInfrastructureResources"
+}

@@ -2,10 +2,25 @@ import json
 import asyncio
 import re
 from collections.abc import AsyncIterator
+from unittest import result
+from unittest import result
+from urllib import response
 from app.core.llm import OllamaClient
 from app.router.prompts import ROUTER_SYSTEM_PROMPT
 from app.core import config 
+from app.router.plugin_router import (
+    plugin_router,
+)
+from app.formatter.result_formatter import (
+    result_formatter,
+)
+from app.router.execution_planner import (
+    execution_planner,
+)
 
+from app.mcp.mcp_tool_runner import (
+    mcp_tool_runner,
+)
 ROUTER_MODEL = config.ROUTER_MODEL
 MODEL_MAPPING = config.WORKER_MODELS
 
@@ -28,7 +43,7 @@ class RoutingEngine:
         async with self.queue_lock:
             if model in self.active_queues and self.active_queues[model] > 0:
                 self.active_queues[model] -= 1
-                
+    
     def _fast_keyword_fallback(self, user_input: str) -> str:
         text = user_input.lower()
         if re.search(r'\b(python|c\+\+|java|script|code|debug|function|node\.js)\b', text):
@@ -44,14 +59,47 @@ class RoutingEngine:
         recommended = parsed_response.get("recommended", "")
         primary_prob = parsed_response.get("probabilities", {}).get(recommended, 0.0)
         return confidence >= 85 and primary_prob >= 70.0
-
+    
     async def process_stream(self, messages: list) -> AsyncIterator[str]:
         if not messages:
             yield "Input was empty. Please provide a query."
             return
 
         user_input = messages[-1].get("content", "")
-        
+        route = (
+            plugin_router.route(
+                user_input
+            )
+        )
+
+        if (
+            route.get("type")
+            in [
+                "plugin",
+                "multi_plugin",
+                "cross_repo_plugin",
+            ]
+        ):
+
+            plan = (
+                execution_planner
+                .create_plan(
+                    route
+                )
+            )
+
+            result = await (
+                mcp_tool_runner.run(
+                    plan
+                )
+            )
+
+            yield (
+                result_formatter
+                .format(result)
+            )
+
+            return
         target_category = "General"
         is_trusted = False
         parsed_response = {}
