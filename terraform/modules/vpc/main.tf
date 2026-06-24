@@ -1,4 +1,4 @@
-variable "app_name"    { type = string }
+variable "app_name" { type = string }
 variable "environment" { type = string }
 
 resource "aws_vpc" "main" {
@@ -48,7 +48,7 @@ resource "aws_security_group" "rds" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]  # only from within VPC
+    cidr_blocks = ["10.0.0.0/16"] # only from within VPC
   }
 
   egress {
@@ -79,8 +79,8 @@ resource "aws_security_group" "redis" {
   }
 }
 
-output "vpc_id"            { value = aws_vpc.main.id }
+output "vpc_id" { value = aws_vpc.main.id }
 output "public_subnet_ids" { value = aws_subnet.public[*].id }
-output "private_subnet_ids"{ value = aws_subnet.private[*].id }
-output "rds_sg_id"         { value = aws_security_group.rds.id }
-output "redis_sg_id"       { value = aws_security_group.redis.id }
+output "private_subnet_ids" { value = aws_subnet.private[*].id }
+output "rds_sg_id" { value = aws_security_group.rds.id }
+output "redis_sg_id" { value = aws_security_group.redis.id }
