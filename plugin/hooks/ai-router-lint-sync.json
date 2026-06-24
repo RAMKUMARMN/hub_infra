@@ -1,0 +1,20 @@
+{
+  "id": "cixio.infra.hooks.pythonLint",
+  "name": "AI Router Python Lint Sync",
+  "event": "PostToolUse",
+  "action": {
+    "type": "shellExecution",
+    "command": "python",
+    "args": [
+      "-m",
+      "flake8",
+      "ai/ai_router/app/"
+    ],
+    "options": {
+      "env": {
+        "TARGET_FILE": "${activeEditorFile}"
+      }
+    }
+  },
+  "timeout": 15000
+}
