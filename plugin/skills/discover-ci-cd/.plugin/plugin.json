@@ -1,0 +1,10 @@
+{
+    "id":  "discover-ci-cd",
+    "name":  "discover-ci-cd",
+    "type":  "skill",
+    "repository":  "hub_infra",
+    "enabled":  true,
+    "version":  "1.0.0",
+    "mcp_server":  "mcp_hub_infra",
+    "tool":  "discoverCiCd"
+}

@@ -11,13 +11,13 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     # GPU Support (Uncomment below if running on a machine with NVIDIA GPUs and nvidia-container-toolkit)
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    #deploy:
+      #resources:
+        #reservations:
+          #devices:
+            #- driver: nvidia
+              #count: all
+              #capabilities: [gpu]/*
     restart: unless-stopped
 
   # ──────────────────────────────────────────────────────────
@@ -31,20 +31,20 @@ services:
         condition: service_started
     environment:
       - OLLAMA_HOST=ollama:11434
-    entrypoint: >
-      /bin/sh -c "
-      echo 'Waiting for Ollama to be ready...' &&
-      while ! ollama list > /dev/null 2>&1; do sleep 2; done &&
-      echo 'Ollama is running! Pulling models (this may take some time)...' &&
-      for model in llama3.2:3b qwen3.5:latest qwen2.5-coder:7b llama3.2-vision:latest; do
-        until ollama pull $$model; do
-          echo \"Network error while pulling $$model, retrying in 5 seconds...\"
-          sleep 5
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        echo 'Waiting for Ollama to be ready...'
+        while ! ollama list > /dev/null 2>&1; do sleep 2; done
+        echo 'Ollama is running! Pulling models (this may take some time)...'
+        for model in llama3.2:3b qwen3.5:latest qwen2.5-coder:7b llama3.2-vision:latest; do
+          until ollama pull "$model"; do
+            echo "Network error while pulling $model, retrying in 5 seconds..."
+            sleep 5
+          done
         done
-      done &&
-      echo '✅ All models pulled successfully!'
-      "
-    # This container exits automatically once models are pulled.
+        echo '✅ All models pulled successfully!'
 
   # ──────────────────────────────────────────────────────────
   # AI Router (Python App)
