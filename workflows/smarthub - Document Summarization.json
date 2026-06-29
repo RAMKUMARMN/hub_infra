@@ -11,57 +11,57 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -240,
-        -16
+        -80,
+        -144
       ],
-      "id": "8b7af204-f58b-429f-91ad-01d42a7b1f75",
+      "id": "f1606f46-5649-4666-a24c-ffff3a52f7a0",
       "name": "Webhook",
       "webhookId": "beafc691-c3d9-4c44-95e5-d9c1df4f3abc"
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={\n  \"status\": \"success\",\n  \"message\": \"Summary generated and email sent\"\n}",
+        "responseBody": "={{$json}}",
         "options": {}
       },
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        512,
-        -16
+        880,
+        -144
       ],
-      "id": "23109d02-b64b-485f-b49b-2b2cbe36f69c",
+      "id": "eff2011a-dede-4ef6-b6e6-c6410fd1f388",
       "name": "Respond to Webhook"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "http://ollama:11434/api/generate",
+        "url": "http://10.0.2.2:11434/api/generate",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"model\": \"llama3.2\",\n  \"prompt\":\"You are a document intelligence assistant.\\n\\nAnalyze the following document and provide:\\n\\nTLDR:\\n<one sentence>\\n\\nKEY_INSIGHTS:\\n- insight 1\\n- insight 2\\n- insight 3\\n\\nACTION_ITEMS:\\n- action 1\\n- action 2\\n- action 3\\n\\nDocument:\\n\\n{{$json.body.document_text}}\",\n  \"stream\": false\n}",
+        "jsonBody": "={\n  \"model\": \"llama3.2\",\n  \"prompt\": \"You are a senior document intelligence analyst.\\n\\nFirst classify the document.\\n\\nPossible document types:\\n- Business Report\\n- Technical Document\\n- Research Paper\\n- Meeting Notes\\n- Policy Document\\n- Healthcare Report\\n- Financial Report\\n- General Document\\n\\nReturn the analysis in EXACTLY this format:\\n\\nDOCUMENT_TYPE:\\n<document type>\\n\\nCONFIDENCE:\\n<0-100%>\\n\\nEXECUTIVE_SUMMARY:\\n<summary>\\n\\nKEY_INSIGHTS:\\n- insight 1\\n- insight 2\\n- insight 3\\n\\nRISKS_AND_CONCERNS:\\n- risk 1\\n- risk 2\\n\\nBUSINESS_IMPACT:\\n<business impact>\\n\\nACTION_ITEMS:\\n- action 1\\n- action 2\\n- action 3\\n\\nDocument:\\n\\n{{$json.body.document_text}}\",\n  \"stream\": false\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        -48,
-        -16
+        112,
+        -144
       ],
-      "id": "1e256cfe-d309-41fa-8d0b-ead3e9bc25b3",
+      "id": "7fce2d24-4bf7-48d3-beae-de7217fee13a",
       "name": "Ollama Summarizer"
     },
     {
       "parameters": {
-        "jsCode": "return [{\n  json: {\n    email: $('Webhook').first().json.body.email,\n    summary: $json.response\n  }\n}];"
+        "jsCode": "const documentText = $('Webhook').first().json.body.document_text;\n\nreturn [{\n  email: $('Webhook').first().json.body.email,\n\n  generated_at: new Date().toISOString(),\n\n  document_length: documentText.length,\n\n  summary:\n`SMARTHUB DOCUMENT INTELLIGENCE REPORT\n\nGenerated: ${new Date().toISOString()}\n\n${$json.response}`\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        144,
-        -16
+        304,
+        -144
       ],
-      "id": "9d74508f-8012-4f82-a430-717ddf497d91",
+      "id": "e054020e-f3bf-4bad-8926-404e814d6c7b",
       "name": "Formalt Summary"
     },
     {
@@ -76,18 +76,31 @@
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        320,
-        -16
+        480,
+        -144
       ],
-      "id": "7cd594bd-9e97-4ce0-b2cc-1c71dd7d7140",
+      "id": "bdd04f0b-2999-4988-99d4-3ed05de3b8fd",
       "name": "Send an Email",
       "webhookId": "f57c0771-c0ba-41b2-9c01-4bba3bd9542e",
       "credentials": {
         "smtp": {
-          "id": "GTO64tnuWPt8hp76",
+          "id": "6t8M6BX0pXdoJq28",
           "name": "SMTP account"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    status: \"success\",\n    message: \"Document analyzed and email sent\",\n\n    email: $json.accepted[0],\n\n    workflow_status: \"SUCCESS\",\n\n    email_delivery: $json.response,\n\n    message_id: $json.messageId,\n\n    message_size: $json.messageSize,\n\n    processing_time_ms: $json.messageTime\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        -144
+      ],
+      "id": "a3174dd0-4e6a-42b1-bbe6-6190744a2145",
+      "name": "Response Metadata"
     }
   ],
   "pinData": {},
@@ -129,6 +142,17 @@
       "main": [
         [
           {
+            "node": "Response Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response Metadata": {
+      "main": [
+        [
+          {
             "node": "Respond to Webhook",
             "type": "main",
             "index": 0
@@ -142,12 +166,12 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "c35970f0-b643-4c46-b364-b755841070c9",
+  "versionId": "8a979724-b698-40e7-9578-3fc3b520e5c1",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "eb2c9f133c6d012fce0e85ded9d14767d5d91aee816245037adc465378ceb4af"
+    "instanceId": "b952a599945266055ed4b5f09c1f00bf47c7a58e4736f6a5baa66bafbf7eb570"
   },
   "nodeGroups": [],
-  "id": "4nPt5abjByYDAYwM",
+  "id": "Y2NUxlRKzFUpbYUl",
   "tags": []
 }

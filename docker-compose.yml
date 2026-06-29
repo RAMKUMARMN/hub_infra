@@ -1,8 +1,9 @@
 services:
 
-  # ──────────────────────────────────────────────────────────
+  #----------------------------------------------------------
   # Ollama Server
-  # ──────────────────────────────────────────────────────────
+  # ---------------------------------------------------------
+  
   ollama:
     image: ollama/ollama:latest
     container_name: cixiohub-ollama
@@ -90,6 +91,20 @@ services:
       - ./workflows:/workflows
 
     restart: unless-stopped
+
+  #------------------------------------------------------
+  # MailHog SMTP Testing Server
+  # -----------------------------------------------------
+  mailhog:
+    image: mailhog/mailhog
+    container_name: cixiohub-mailhog
+
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+    restart: unless-stopped
+
 
 volumes:
   ollama_data:
