@@ -1,6 +1,7 @@
 ---
 name: infra-planner
 description: "Implementation planner for hub_infra: generates structured plans for new Terraform modules, Mosquitto config changes, CI pipeline additions, or refactoring. Does NOT implement code."
+tools: Read, Glob, Grep, WebSearch
 ---
 
 # Infra Planner Agent

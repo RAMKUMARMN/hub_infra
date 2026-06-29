@@ -1,6 +1,7 @@
 ---
 name: infra-mosquitto
 description: "Single-task agent for configuring Mosquitto MQTT broker settings: listeners, bridges, authentication, ACLs, and TLS. Does NOT handle Terraform modules or CI workflows."
+tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
 # Infra Mosquitto Agent

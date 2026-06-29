@@ -1,6 +1,7 @@
 ---
 name: infra-terraform
 description: "Single-task agent for creating and updating Terraform modules (VPC, RDS, ElastiCache, S3) in terraform/modules/. Does NOT handle Mosquitto MQTT config, CI workflows, or multi-module orchestration."
+tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
 # Infra Terraform Agent

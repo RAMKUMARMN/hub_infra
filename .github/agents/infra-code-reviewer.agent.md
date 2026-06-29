@@ -1,6 +1,7 @@
 ---
 name: infra-code-reviewer
 description: "Code reviewer for hub_infra: reviews Terraform modules, Mosquitto config, and CI workflows across correctness, security, best practices, and readability. Does NOT implement code."
+tools: Read, Glob, Grep
 ---
 
 # Infra Code Reviewer Agent
