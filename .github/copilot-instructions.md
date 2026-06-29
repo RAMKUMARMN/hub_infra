@@ -41,7 +41,7 @@ This repository uses the following agents:
 
 | Agent | File | Purpose |
 |---|---|---|
-| `infra-agent` | `.github/agents/infra agent.agent.md` | Coordinator — routes to single-task agents |
+| `infra-agent` | `.github/agents/infra-agent.agent.md` | Coordinator — routes to single-task agents |
 | `infra-terraform` | `.github/agents/infra-terraform.agent.md` | Terraform modules (VPC, RDS, ElastiCache, S3) |
 | `infra-mosquitto` | `.github/agents/infra-mosquitto.agent.md` | Mosquitto MQTT broker configuration |
 | `infra-ci` | `.github/agents/infra-ci.agent.md` | GitHub Actions CI/CD workflows |

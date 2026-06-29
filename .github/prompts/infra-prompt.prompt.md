@@ -12,7 +12,7 @@ This coordinator does NOT implement tasks directly. It identifies the task type 
 | Create/update a Terraform module | `infra-terraform` | `infra-terraform-prompt.prompt.md` |
 | Configure Mosquitto MQTT broker | `infra-mosquitto` | `infra-mosquitto-prompt.prompt.md` |
 | Create/update CI workflows | `infra-ci` | `infra-ci-prompt.prompt.md` |
-| Generate an implementation plan | `infra-planner` | `infra-planner.agent.md` |
-| Review code before merge | `infra-code-reviewer` | `infra-code-reviewer.agent.md` |
+| Generate an implementation plan | `infra-planner` | `infra-planner-prompt.prompt.md` |
+| Review code before merge | `infra-code-reviewer` | `infra-code-reviewer-prompt.prompt.md` |
 
 If the request spans multiple domains, ask the user to break it into single-task prompts.

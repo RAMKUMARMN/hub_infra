@@ -5,7 +5,7 @@ description: Skills for the `hub_infra` assistant: Terraform module creation, Mo
 
 # Infra Agent — Skills Catalog
 
-This document describes the skills, inputs/outputs, tools, safety constraints, and example prompts the `infra-agent` (see `infra agent.agent.md`) supports for the `hub_infra` repository.
+This document describes the skills, inputs/outputs, tools, safety constraints, and example prompts the `infra-agent` (see `infra-agent.agent.md`) supports for the `hub_infra` repository.
 
 **Purpose**
 - Provide a compact, discoverable list of the agent's actionable capabilities so maintainers can quickly know what to ask and what to expect.
