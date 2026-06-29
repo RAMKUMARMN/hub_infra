@@ -1,0 +1,10 @@
+{
+    "id":  "discover-terraform-iac",
+    "name":  "discover-terraform-iac",
+    "type":  "skill",
+    "repository":  "hub_infra",
+    "enabled":  true,
+    "version":  "1.0.0",
+    "mcp_server":  "mcp_hub_infra",
+    "tool":  "discoverTerraformModules"
+}

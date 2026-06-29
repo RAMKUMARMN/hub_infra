@@ -1,0 +1,10 @@
+{
+    "id":  "discover-observability-stack",
+    "name":  "discover-observability-stack",
+    "type":  "skill",
+    "repository":  "hub_infra",
+    "enabled":  true,
+    "version":  "1.0.0",
+    "mcp_server":  "mcp_hub_infra",
+    "tool":  "discoverInfrastructureResources"
+}
