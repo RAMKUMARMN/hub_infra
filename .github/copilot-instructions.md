@@ -1,6 +1,7 @@
 ---
 applyTo: "**/*.tf,**/*.tfvars,**/*.hcl"
 ---
+
 # Project coding standards for Terraform
 
 Apply the [general coding guidelines](./general-coding.instructions.md) to all code.
@@ -33,3 +34,23 @@ Apply the [general coding guidelines](./general-coding.instructions.md) to all c
 - Enable encryption at rest (RDS, S3, ElastiCache)
 - Restrict public access — default-deny security groups and S3 bucket policies
 - Enable VPC flow logs for network auditing
+
+## Agent Guidelines
+
+This repository uses the following agents:
+
+| Agent | File | Purpose |
+|---|---|---|
+| `infra-agent` | `.github/agents/infra agent.agent.md` | Coordinator — routes to single-task agents |
+| `infra-terraform` | `.github/agents/infra-terraform.agent.md` | Terraform modules (VPC, RDS, ElastiCache, S3) |
+| `infra-mosquitto` | `.github/agents/infra-mosquitto.agent.md` | Mosquitto MQTT broker configuration |
+| `infra-ci` | `.github/agents/infra-ci.agent.md` | GitHub Actions CI/CD workflows |
+| `infra-planner` | `.github/agents/infra-planner.agent.md` | Implementation planning |
+| `infra-code-reviewer` | `.github/agents/infra-code-reviewer.agent.md` | Code review before merge |
+
+Prompts are in `.github/prompts/` and skills in `.agents/skills/`.
+
+When asking for help, prefix your request with the agent name:
+- "@infra-terraform Add an RDS module with PostgreSQL 16"
+- "@infra-mosquitto Add a WebSocket listener on port 9001"
+- "@infra-ci Create an infra.yml workflow for dev, staging, prod"
