@@ -1,0 +1,10 @@
+{
+    "id":  "discover-ai-router",
+    "name":  "discover-ai-router",
+    "type":  "skill",
+    "repository":  "hub_infra",
+    "enabled":  true,
+    "version":  "1.0.0",
+    "mcp_server":  "mcp_hub_infra",
+    "tool":  "discoverInfraArchitecture"
+}

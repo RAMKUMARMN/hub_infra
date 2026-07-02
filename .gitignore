@@ -1,0 +1,26 @@
+node_modules/
+**/node_modules/
+dist/
+.vscode/
+# Environments
+.env
+venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS generated files
+.DS_Store
+
+# Terraform
+.terraform/
+.terraform.*
+terraform.tfstate
+terraform.tfstate.*
+*.tfvars
+*.tfvars.json
+plan.out

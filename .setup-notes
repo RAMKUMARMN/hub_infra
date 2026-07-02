@@ -1,1 +1,33 @@
-# Setup notes
+# CixioHub Infrastructure Setup
+
+## 1. Environment Configuration
+Copy the provided `.env.example` (if available) to `.env` in the root directory. If one is not present, create a `.env` file and set the required variables:
+```env
+LLM_CHAT_ENDPOINT=http://localhost:11434/api/chat
+ROUTER_MODEL=llama3.2:3b
+MODEL_GENERAL=qwen3.5:latest
+MODEL_CODING=qwen2.5-coder:7b
+MODEL_REASONING=qwen3.5:latest
+MODEL_VISION=llama3.2-vision:latest
+```
+
+## 2. AI Router Local Development
+1. Navigate to the router directory: `cd ai/ai_router`
+2. Create a virtual environment: `python -m venv venv`
+3. Activate the virtual environment:
+   - Linux/MacOS: `source venv/bin/activate`
+   - Windows: `venv\Scripts\activate`
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run the simulator to test locally: `python app/main.py`
+6. Run the validation suite: `python tests/run_validation_test.py`
+
+## 3. Mosquitto Broker
+Ensure Docker or a local Mosquitto service is installed. Use the configuration in `mosquitto/mosquitto.conf`.
+**Note:** For production, ensure `allow_anonymous false` is set and a `password_file` is provided.
+
+## 4. Terraform
+1. Install Terraform CLI (`>= 1.7.0`).
+2. Navigate to `terraform/`: `cd terraform`
+3. Copy `terraform.tfvars.example` to `terraform.tfvars` and fill in the values.
+4. Run `terraform init` to initialize the project.
+5. Run `terraform plan` to view the execution plan.
